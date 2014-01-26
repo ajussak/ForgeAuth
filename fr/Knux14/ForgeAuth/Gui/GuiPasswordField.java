@@ -3,11 +3,13 @@ package fr.Knux14.ForgeAuth.Gui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ChatAllowedCharacters;
+
 import org.lwjgl.opengl.GL11;
 
-public class GuiPasswordField extends Gui
+public class GuiPasswordField extends GuiTextField
 {
   private final FontRenderer fontRenderer;
   private final int xPos;
@@ -34,6 +36,7 @@ public class GuiPasswordField extends Gui
 
   public GuiPasswordField(FontRenderer par1FontRenderer, int par2, int par3, int par4, int par5)
   {
+	super(par1FontRenderer, par2, par3, par4, par5);
     fontRenderer = par1FontRenderer;
     xPos = par2;
     yPos = par3;

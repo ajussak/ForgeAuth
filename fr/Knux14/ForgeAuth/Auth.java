@@ -53,12 +53,18 @@ public class Auth
   public void load(FMLInitializationEvent e)
   {
     proxy.registerRenderers();
-    
+    Vars.debug = config.get(Configuration.CATEGORY_GENERAL, "Debug", false).getBoolean(false);
+    Vars.useMYSQL = config.get(Configuration.CATEGORY_GENERAL, "Use mysql", false).getBoolean(false);
+    Vars.mysql.put("host", config.get(Configuration.CATEGORY_GENERAL, "MYSQL-Host", "localhost").getString());
+    Vars.mysql.put("user", config.get(Configuration.CATEGORY_GENERAL, "MYSQL-User", "username").getString());
+    Vars.mysql.put("pass", config.get(Configuration.CATEGORY_GENERAL, "MYSQL-Password", "psswd").getString());
+    Vars.mysql.put("port", config.get(Configuration.CATEGORY_GENERAL, "MYSQL-Port", "3306").getString());
   }
 
   @Mod.EventHandler
   public void postInit(FMLPostInitializationEvent e)
   {
+	  if (config.hasChanged()) config.save();
   }
 
   @Mod.EventHandler
