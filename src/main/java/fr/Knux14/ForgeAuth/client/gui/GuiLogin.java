@@ -95,7 +95,8 @@ public class GuiLogin extends GuiScreen {
 			packet.data = bos.toByteArray();
 			packet.length = bos.size();
 			Auth.network.sendToServer(packet);
-			mc.currentScreen = null;
+			mc.displayGuiScreen((GuiScreen) null);
+			mc.setIngameFocus();
 		} else if (par1GuiButton.id == 1) {
 			mc.theWorld.sendQuittingDisconnectingPacket();
 		} else if (par1GuiButton.id == 2) {
