@@ -11,3 +11,13 @@
 /forge_at.cfg~
 /forge_logo.png
 /mcpmod.info
+*~
+*.iml
+*.ipr
+*.iws
+/eclipse
+/out
+/.project
+/.classpath
+/.gradle
+/.settings
