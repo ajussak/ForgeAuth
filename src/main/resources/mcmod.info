@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ForgeAuth",
+  "name": "ForgeAuth",
+  "description": "A simple Authentification system for Forge. Inspired by AuthMe.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://dl.dropboxusercontent.com/u/7560728/ForgeAuth/dlpage.html",
+  "updateUrl": "",
+  "authorList": ["Knux14", "Wascar"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
