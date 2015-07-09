@@ -7,7 +7,7 @@ public class Vars
 {
 	
   public static final String modid = "ForgeAuth";
-  public static final String version = "0.6";
+  public static final String version = "0.6.1";
   public static final String name = "ForgeAuth";
   public static File userfolder;
   public static boolean debug;
