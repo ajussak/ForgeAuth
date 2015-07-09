@@ -53,25 +53,21 @@ public class CancelledEvents {
 
 	@SubscribeEvent
 	public void playerChat(ServerChatEvent e) {
-		if (!((Boolean) Auth.players.get(e.player)).booleanValue())
+		if (!(Auth.players.get(e.player)))
 			e.setCanceled(true);
 	}
 
 	@SubscribeEvent
 	public void playerCmd(CommandEvent e) {
 		if (Vars.modEnabled) {
-			if (((e.sender instanceof EntityPlayer))
-					&& (!((Boolean) Auth.players.get((EntityPlayer) e.sender))
-							.booleanValue()))
+			if (((e.sender instanceof EntityPlayer)) && (!(Auth.players.get(e.sender))))
 				e.setCanceled(true);
 		}
 	}
 
 	private void cancel(EntityEvent e) {
 		if (Vars.modEnabled) {
-			if (((e.entity instanceof EntityPlayer))
-					&& (!((Boolean) Auth.players.get((EntityPlayer) e.entity))
-							.booleanValue()))
+			if (((e.entity instanceof EntityPlayer)) && (!(Auth.players.get((e.entity)))))
 				e.setCanceled(true);
 		}
 	}

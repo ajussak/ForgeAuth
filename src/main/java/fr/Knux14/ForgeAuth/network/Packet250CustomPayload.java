@@ -10,12 +10,6 @@ public class Packet250CustomPayload implements IMessage {
 
     public Packet250CustomPayload() { }
 
-    public Packet250CustomPayload(byte[] message)
-    {
-        this.length = message.length;
-        this.data = message;
-    }
-
     @Override
     public void fromBytes(ByteBuf buf)
     {

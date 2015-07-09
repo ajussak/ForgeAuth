@@ -17,11 +17,11 @@ public class onPlayerJoin {
 	{
 		if (Vars.modEnabled) {
 			Auth.print("No login, mod disabled");
-			Auth.players.put(event.player, Boolean.valueOf(true));
+			Auth.players.put(event.player, true);
 		}
         else {
             Auth.print("Asking player to register/Login");
-            Auth.players.put(event.player, Boolean.valueOf(false));
+            Auth.players.put(event.player, false);
             boolean hasPass = Auth.hasPass(event.player);
             ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
             DataOutputStream outputStream = new DataOutputStream(bos);

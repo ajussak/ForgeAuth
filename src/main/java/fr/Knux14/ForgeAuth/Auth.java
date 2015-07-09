@@ -11,16 +11,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
-import fr.Knux14.ForgeAuth.network.Packet250CustomPayload;
-import fr.Knux14.ForgeAuth.network.client.CustomPayloadClientHandler;
-import fr.Knux14.ForgeAuth.network.server.CustomPayloadServerHandler;
 import fr.Knux14.ForgeAuth.proxy.CommonProxy;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -32,7 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 @Mod(modid=Vars.modid, name=Vars.name, version=Vars.version)
 public class Auth
 {
-  public static HashMap<EntityPlayer, Boolean> players = new HashMap();
+  public static HashMap<EntityPlayer, Boolean> players = new HashMap<EntityPlayer, Boolean>();
 
   public static SimpleNetworkWrapper network;
 
@@ -46,9 +38,17 @@ public class Auth
   @EventHandler
   public void preInit(FMLPreInitializationEvent e) { config = new Configuration(e.getSuggestedConfigurationFile());
       Vars.userfolder = new File(e.getSuggestedConfigurationFile().getParentFile(), "AuthPlayers");
-      if ((e.getSide() == Side.SERVER) &&
-      (!Vars.userfolder.exists())) Vars.userfolder.mkdir();
       network = NetworkRegistry.INSTANCE.newSimpleChannel("AuthChan1");
+      try
+      {
+      if ((e.getSide() == Side.SERVER) && !Vars.userfolder.exists())
+          if(!Vars.userfolder.mkdir())
+            throw new IOException("[" + Vars.modid + "] Cannot to create config folder");
+      }
+      catch(Exception ex)
+      {
+          ex.printStackTrace();
+      }
   }
 
   @EventHandler
@@ -139,8 +139,15 @@ public class Auth
 
   public static boolean saveFile(File f, String str) {
     try {
-      if (f.exists()) f.delete();
-      f.createNewFile();
+      if (!f.exists())
+      {
+          if (!(f.createNewFile()))
+              throw new IOException("[" + Vars.modid + "] Cannot to save player password");
+      }
+      else {
+          if (!(f.delete() && f.createNewFile()))
+              throw new IOException("[" + Vars.modid + "] Cannot to save player password");
+      }
       FileWriter fw = new FileWriter(f);
       fw.write(str);
       fw.close();
@@ -159,8 +166,8 @@ public class Auth
 		return new String(Hex.encodeHex(cr.digest()));
 	} catch (NoSuchAlgorithmException e) {
 		e.printStackTrace();
-		return null;
 	}
+    return "";
   }
   
   public static void print(String s) {
