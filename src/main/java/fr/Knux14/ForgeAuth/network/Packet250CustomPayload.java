@@ -1,7 +1,7 @@
 package fr.Knux14.ForgeAuth.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class Packet250CustomPayload implements IMessage {
 
@@ -9,12 +9,6 @@ public class Packet250CustomPayload implements IMessage {
     public byte data[];
 
     public Packet250CustomPayload() { }
-
-    public Packet250CustomPayload(byte[] message)
-    {
-        this.length = message.length;
-        this.data = message;
-    }
 
     @Override
     public void fromBytes(ByteBuf buf)

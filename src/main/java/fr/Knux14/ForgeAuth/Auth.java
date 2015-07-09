@@ -1,33 +1,23 @@
 package fr.Knux14.ForgeAuth;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
-import fr.Knux14.ForgeAuth.network.Packet250CustomPayload;
-import fr.Knux14.ForgeAuth.network.client.CustomPayloadClientHandler;
-import fr.Knux14.ForgeAuth.network.server.CustomPayloadServerHandler;
+import fr.Knux14.ForgeAuth.command.Command;
 import fr.Knux14.ForgeAuth.proxy.CommonProxy;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
+import org.apache.commons.codec.binary.Hex;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import fr.Knux14.ForgeAuth.command.Command;
-import net.minecraftforge.common.config.Configuration;
-import org.apache.commons.codec.binary.Hex;
-import net.minecraft.entity.player.EntityPlayer;
 
 @Mod(modid=Vars.modid, name=Vars.name, version=Vars.version)
 public class Auth
@@ -36,14 +26,14 @@ public class Auth
 
   public static SimpleNetworkWrapper network;
 
-  @Instance("ForgeAuth")
+  @Mod.Instance("ForgeAuth")
   public static Auth instance;
 
   @SidedProxy(clientSide="fr.Knux14.ForgeAuth.proxy.ClientProxy", serverSide="fr.Knux14.ForgeAuth.proxy.CommonProxy")
   public static CommonProxy proxy;
   public static Configuration config;
   
-  @EventHandler
+  @Mod.EventHandler
   public void preInit(FMLPreInitializationEvent e) { config = new Configuration(e.getSuggestedConfigurationFile());
       Vars.userfolder = new File(e.getSuggestedConfigurationFile().getParentFile(), "AuthPlayers");
       if ((e.getSide() == Side.SERVER) &&
@@ -51,7 +41,7 @@ public class Auth
       network = NetworkRegistry.INSTANCE.newSimpleChannel("AuthChan1");
   }
 
-  @EventHandler
+  @Mod.EventHandler
   public void load(FMLInitializationEvent e)
   {
     proxy.registerRenderers();
@@ -63,13 +53,13 @@ public class Auth
     Vars.mysql.put("port", config.get(Configuration.CATEGORY_GENERAL, "MYSQL-Port", "3306").getString());
   }
 
-  @EventHandler
+  @Mod.EventHandler
   public void postInit(FMLPostInitializationEvent e)
   {
 	  if (config.hasChanged()) config.save();
   }
 
-  @EventHandler
+  @Mod.EventHandler
   public void serverStart(FMLServerStartingEvent event)
   {
     event.registerServerCommand(new Command());

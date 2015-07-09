@@ -1,19 +1,18 @@
 package fr.Knux14.ForgeAuth.event;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import fr.Knux14.ForgeAuth.Auth;
 import fr.Knux14.ForgeAuth.Vars;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import fr.Knux14.ForgeAuth.network.Packet250CustomPayload;
 import net.minecraft.entity.player.EntityPlayerMP;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class onPlayerJoin {
 
 	@SubscribeEvent
-	public void onPlayerLogin(PlayerLoggedInEvent event)
+	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		if (Vars.modEnabled) {
 			Auth.print("No login, mod disabled");
@@ -46,7 +45,7 @@ public class onPlayerJoin {
 	}
 
 	@SubscribeEvent
-	public void onPlayerLogout(PlayerLoggedOutEvent event) {
+	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
 		Auth.players.remove(event.player);
 	}
 
