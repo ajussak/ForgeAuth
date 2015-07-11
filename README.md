@@ -3,4 +3,18 @@ ForgeAuth
 
 A simple Authentification system for Forge. Inspired by AuthMe
 
-Updated to 1.7.10 by Wascar
+## How to build
+
+Open a terminal
+
+For Linux and Mac OS X
+```
+./gradlew build
+```
+
+For Windows
+```
+gradlew build
+```
+
+The jar will generated in build/lib/
