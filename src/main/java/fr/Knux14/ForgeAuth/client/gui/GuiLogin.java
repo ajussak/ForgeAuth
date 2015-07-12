@@ -1,5 +1,8 @@
 package fr.Knux14.ForgeAuth.client.gui;
 
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import fr.Knux14.ForgeAuth.Auth;
 import fr.Knux14.ForgeAuth.Vars;
 import java.io.ByteArrayOutputStream;
@@ -77,7 +80,8 @@ public class GuiLogin extends GuiScreen {
 				else
 					Auth.saveFile(saveFile, passField.getText());
 			} else
-				saveFile.delete();
+				if(saveFile.delete())
+                    FMLLog.warning("Cannot to remove Last Pass");
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
 			DataOutputStream outputStream = new DataOutputStream(bos);
@@ -94,7 +98,7 @@ public class GuiLogin extends GuiScreen {
 			packet.data = bos.toByteArray();
 			packet.length = bos.size();
 			Auth.network.sendToServer(packet);
-			mc.displayGuiScreen((GuiScreen) null);
+			mc.displayGuiScreen(null);
 			mc.setIngameFocus();
 		} else if (par1GuiButton.id == 1) {
 			mc.theWorld.sendQuittingDisconnectingPacket();

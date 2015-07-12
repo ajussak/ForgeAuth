@@ -26,7 +26,7 @@ public class CustomPayloadServerHandler implements IMessageHandler<Packet250Cust
             if (Auth.hasPass(ply)) {
                 if (Auth.checkPass(ply, pass)) {
                     Auth.players.remove(ply);
-                    Auth.players.put(ply, Boolean.valueOf(true));
+                    Auth.players.put(ply, true);
                     ply.addChatMessage(new ChatComponentText("You are logged in !"));
                 } else {
                     EntityPlayerMP pl = ctx.getServerHandler().playerEntity;
@@ -35,7 +35,7 @@ public class CustomPayloadServerHandler implements IMessageHandler<Packet250Cust
             } else {
                 Auth.savePlayer(ply, pass);
                 Auth.players.remove(ply);
-                Auth.players.put(ply, Boolean.valueOf(true));
+                Auth.players.put(ply, true);
                 ply.addChatMessage(new ChatComponentText("You are registred !"));
             }
         } catch (IOException e) {

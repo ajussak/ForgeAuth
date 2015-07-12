@@ -3,10 +3,13 @@ package fr.Knux14.ForgeAuth.command;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
 import fr.Knux14.ForgeAuth.Vars;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.fml.common.FMLLog;
 
 
 public class Command extends CommandBase {
@@ -30,12 +33,22 @@ public class Command extends CommandBase {
 			icommandsender.addChatMessage(IChatComponent.Serializer.jsonToComponent(
                     "$4[ForgeAuth] Use: /authreset <user>"));
 		} else {
-	    	File f = new File(Vars.userfolder, astring[0]);
-			if (f.exists()) {
-				f.delete();
-				icommandsender.addChatMessage(IChatComponent.Serializer.jsonToComponent("§4[ForgeAuth] " + astring[0]
-						+ "'s password reset."));
-			} else {
+            MinecraftServer server = MinecraftServer.getServer();
+            File f = new File(Vars.userfolder, server.getConfigurationManager().getPlayerByUsername(astring[0]).getUniqueID().toString());
+			if (f.exists())
+            {
+                if(!f.delete())
+                {
+                    icommandsender.addChatMessage(IChatComponent.Serializer.jsonToComponent("§4[ForgeAuth]" +
+                            "Error : Cannot to remove this player."));
+                    FMLLog.warning("Cannot to remove " + astring[0]);
+                }
+                else
+				    icommandsender.addChatMessage(IChatComponent.Serializer.jsonToComponent("§4[ForgeAuth] " + astring[0]
+                            + "'s password reset."));
+			}
+            else
+            {
 				icommandsender.addChatMessage(IChatComponent.Serializer.jsonToComponent(
                         "§4[ForgeAuth] " + "This player doesn't exists."));
 			}

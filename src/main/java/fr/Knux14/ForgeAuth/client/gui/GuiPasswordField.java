@@ -30,9 +30,6 @@ public class GuiPasswordField extends GuiTextField
   private int cursorPosition = 0;
 
   private int selectionEnd = 0;
-  private int enabledColor = 14737632;
-  private int disabledColor = 7368816;
-  private boolean field_73823_s = true;
 
   public GuiPasswordField(FontRenderer par1FontRenderer, int par2, int par3, int par4, int par5)
   {
@@ -82,7 +79,6 @@ public class GuiPasswordField extends GuiTextField
     int var4 = cursorPosition < selectionEnd ? cursorPosition : selectionEnd;
     int var5 = cursorPosition < selectionEnd ? selectionEnd : cursorPosition;
     int var6 = maxStringLength - text.length() - (var4 - selectionEnd);
-    boolean var7 = false;
 
     if (text.length() > 0)
     {
@@ -405,7 +401,7 @@ public class GuiPasswordField extends GuiTextField
         drawRect(xPos, yPos, xPos + width, yPos + height, -16777216);
       }
 
-      int var1 = isEnabled ? enabledColor : disabledColor;
+      int var1 = isEnabled ? 14737632 : 7368816;
       int var2 = cursorPosition - field_73816_n;
       int var3 = selectionEnd - field_73816_n;
       String var4 = fontRenderer.trimStringToWidth(text.substring(field_73816_n), getWidth());
@@ -422,7 +418,6 @@ public class GuiPasswordField extends GuiTextField
 
       if (var4.length() > 0)
       {
-        String var10 = var5 ? var4.substring(0, var2) : var4;
         var9 = fontRenderer.drawStringWithShadow(text.replaceAll("(?s).", "*"), var7, var8, var1);
       }
 
@@ -525,11 +520,6 @@ public class GuiPasswordField extends GuiTextField
     enableBackgroundDrawing = par1;
   }
 
-  public void func_73794_g(int par1)
-  {
-    enabledColor = par1;
-  }
-
   public void setFocused(boolean par1)
   {
     if ((par1) && (!isFocused))
@@ -615,11 +605,7 @@ public class GuiPasswordField extends GuiTextField
 
   public boolean func_73778_q()
   {
-    return field_73823_s;
+    return true;
   }
 
-  public void func_73790_e(boolean par1)
-  {
-    field_73823_s = par1;
-  }
 }

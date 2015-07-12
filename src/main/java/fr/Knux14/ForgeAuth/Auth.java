@@ -22,7 +22,7 @@ import java.util.HashMap;
 @Mod(modid=Vars.modid, name=Vars.name, version=Vars.version)
 public class Auth
 {
-  public static HashMap<EntityPlayer, Boolean> players = new HashMap();
+  public static HashMap<EntityPlayer, Boolean> players = new HashMap<EntityPlayer, Boolean>();
 
   public static SimpleNetworkWrapper network;
 
@@ -36,9 +36,17 @@ public class Auth
   @Mod.EventHandler
   public void preInit(FMLPreInitializationEvent e) { config = new Configuration(e.getSuggestedConfigurationFile());
       Vars.userfolder = new File(e.getSuggestedConfigurationFile().getParentFile(), "AuthPlayers");
-      if ((e.getSide() == Side.SERVER) &&
-      (!Vars.userfolder.exists())) Vars.userfolder.mkdir();
       network = NetworkRegistry.INSTANCE.newSimpleChannel("AuthChan1");
+      try
+      {
+      if ((e.getSide() == Side.SERVER) && !Vars.userfolder.exists())
+          if(!Vars.userfolder.mkdir())
+            throw new IOException("[" + Vars.modid + "] Cannot to create config folder");
+      }
+      catch(Exception ex)
+      {
+          ex.printStackTrace();
+      }
   }
 
   @Mod.EventHandler
@@ -129,8 +137,15 @@ public class Auth
 
   public static boolean saveFile(File f, String str) {
     try {
-      if (f.exists()) f.delete();
-      f.createNewFile();
+      if (!f.exists())
+      {
+          if (!(f.createNewFile()))
+              throw new IOException("[" + Vars.modid + "] Cannot to save player password");
+      }
+      else {
+          if (!(f.delete() && f.createNewFile()))
+              throw new IOException("[" + Vars.modid + "] Cannot to save player password");
+      }
       FileWriter fw = new FileWriter(f);
       fw.write(str);
       fw.close();
@@ -149,8 +164,8 @@ public class Auth
 		return new String(Hex.encodeHex(cr.digest()));
 	} catch (NoSuchAlgorithmException e) {
 		e.printStackTrace();
-		return null;
 	}
+    return "";
   }
   
   public static void print(String s) {

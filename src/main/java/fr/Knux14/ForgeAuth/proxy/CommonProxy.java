@@ -1,8 +1,6 @@
 package fr.Knux14.ForgeAuth.proxy;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.relauncher.Side;
 import fr.Knux14.ForgeAuth.Auth;
 import fr.Knux14.ForgeAuth.Vars;
