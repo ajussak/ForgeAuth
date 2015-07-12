@@ -1,18 +1,18 @@
 package fr.Knux14.ForgeAuth.client.gui;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import fr.Knux14.ForgeAuth.Auth;
 import fr.Knux14.ForgeAuth.Vars;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
+
 import fr.Knux14.ForgeAuth.network.Packet250CustomPayload;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -50,17 +50,17 @@ public class GuiLogin extends GuiScreen {
 			savedPass = Auth.readFile(saveFile);
 		}
 		if (label.equals("Register")) {
-			textField = new GuiTextField(fontRendererObj, width / 2 - 100, 60,
+			textField = new GuiTextField(3, fontRendererObj, width / 2 - 100, 60,
 					200, 20);
 			textField.setFocused(true);
 			textField.setText(savedPass != null ? savedPass : "");
 			remember.setChecked((savedPass != null) && (!savedPass.isEmpty()));
 		} else {
 			if (Vars.debug)
-				passField = new GuiTextField(fontRendererObj, width / 2 - 100, 60,
+				passField = new GuiTextField(3, fontRendererObj, width / 2 - 100, 60,
 						200, 20);
 			else
-				passField = new GuiPasswordField(fontRendererObj, width / 2 - 100,
+				passField = new GuiPasswordField(3, fontRendererObj, width / 2 - 100,
 						60, 200, 20);
 			passField.setFocused(true);
 			passField.setText(savedPass != null ? savedPass : "");
@@ -124,7 +124,11 @@ public class GuiLogin extends GuiScreen {
 	}
 
 	protected void mouseClicked(int par1, int par2, int par3) {
-		super.mouseClicked(par1, par2, par3);
+		try {
+			super.mouseClicked(par1, par2, par3);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		if (label.equals("Register"))
 			textField.mouseClicked(par1, par2, par3);
 		else

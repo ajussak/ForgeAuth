@@ -1,7 +1,5 @@
 package fr.Knux14.ForgeAuth.proxy;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import fr.Knux14.ForgeAuth.Auth;
 import fr.Knux14.ForgeAuth.Vars;
 import fr.Knux14.ForgeAuth.event.CancelledEvents;
@@ -9,6 +7,8 @@ import fr.Knux14.ForgeAuth.event.onPlayerJoin;
 import fr.Knux14.ForgeAuth.network.Packet250CustomPayload;
 import fr.Knux14.ForgeAuth.network.server.CustomPayloadServerHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class CommonProxy {
 
