@@ -1,7 +1,7 @@
-package fr.Knux14.ForgeAuth.network.server;
+package fr.wascar.ForgeAuth.network.server;
 
-import fr.Knux14.ForgeAuth.Auth;
-import fr.Knux14.ForgeAuth.network.Packet250CustomPayload;
+import fr.wascar.ForgeAuth.ForgeAuth;
+import fr.wascar.ForgeAuth.network.Packet250CustomPayload;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
@@ -23,19 +23,19 @@ public class CustomPayloadServerHandler implements IMessageHandler<Packet250Cust
             inputStream.readUTF(); //Useless value but use in Client
             String pass = inputStream.readUTF();
             EntityPlayer ply = ctx.getServerHandler().playerEntity;
-            if (Auth.hasPass(ply)) {
-                if (Auth.checkPass(ply, pass)) {
-                    Auth.players.remove(ply);
-                    Auth.players.put(ply, true);
+            if (ForgeAuth.hasPass(ply)) {
+                if (ForgeAuth.checkPass(ply, pass)) {
+                    ForgeAuth.players.remove(ply);
+                    ForgeAuth.players.put(ply, true);
                     ply.addChatMessage(new ChatComponentText("You are logged in !"));
                 } else {
                     EntityPlayerMP pl = ctx.getServerHandler().playerEntity;
                     pl.playerNetServerHandler.kickPlayerFromServer("Bad password");
                 }
             } else {
-                Auth.savePlayer(ply, pass);
-                Auth.players.remove(ply);
-                Auth.players.put(ply, true);
+                ForgeAuth.savePlayer(ply, pass);
+                ForgeAuth.players.remove(ply);
+                ForgeAuth.players.put(ply, true);
                 ply.addChatMessage(new ChatComponentText("You are registred !"));
             }
         } catch (IOException e) {

@@ -1,7 +1,7 @@
-package fr.Knux14.ForgeAuth.network.client;
+package fr.wascar.ForgeAuth.network.client;
 
-import fr.Knux14.ForgeAuth.client.gui.GuiLogin;
-import fr.Knux14.ForgeAuth.network.Packet250CustomPayload;
+import fr.wascar.ForgeAuth.client.gui.GuiLogin;
+import fr.wascar.ForgeAuth.network.Packet250CustomPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -18,8 +18,7 @@ public class CustomPayloadClientHandler implements IMessageHandler<Packet250Cust
         DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(message.data));
         try {
             String type = inputStream.readUTF();
-            GuiLogin gl = new GuiLogin(type);
-            Minecraft.getMinecraft().displayGuiScreen(gl);
+            Minecraft.getMinecraft().displayGuiScreen(new GuiLogin(type));
         }
         catch (IOException e)
         {

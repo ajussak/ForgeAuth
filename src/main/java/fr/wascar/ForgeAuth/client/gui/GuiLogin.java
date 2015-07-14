@@ -1,13 +1,11 @@
-package fr.Knux14.ForgeAuth.client.gui;
+package fr.wascar.ForgeAuth.client.gui;
 
-import fr.Knux14.ForgeAuth.Auth;
-import fr.Knux14.ForgeAuth.Vars;
+import fr.wascar.ForgeAuth.ForgeAuth;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-
-import fr.Knux14.ForgeAuth.network.Packet250CustomPayload;
+import fr.wascar.ForgeAuth.network.Packet250CustomPayload;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -27,7 +25,7 @@ public class GuiLogin extends GuiScreen {
 
 	public GuiLogin(String registerOrLogin) {
 		label = registerOrLogin;
-		saveFile = new File(Vars.userfolder.getParent(), "ForgeAuthLastPass");
+		saveFile = new File(ForgeAuth.userfolder.getParent(), "ForgeAuthLastPass");
 	}
 
 	public void updateScreen() {
@@ -47,7 +45,7 @@ public class GuiLogin extends GuiScreen {
 		buttonList.add(this.remember = new GuiCheckBox(2, width / 2 + 84, 85));
 		String savedPass = "";
 		if (saveFile.exists()) {
-			savedPass = Auth.readFile(saveFile);
+			savedPass = ForgeAuth.readFile(saveFile);
 		}
 		if (label.equals("Register")) {
 			textField = new GuiTextField(3, fontRendererObj, width / 2 - 100, 60,
@@ -56,7 +54,7 @@ public class GuiLogin extends GuiScreen {
 			textField.setText(savedPass != null ? savedPass : "");
 			remember.setChecked((savedPass != null) && (!savedPass.isEmpty()));
 		} else {
-			if (Vars.debug)
+			if (ForgeAuth.debug)
 				passField = new GuiTextField(3, fontRendererObj, width / 2 - 100, 60,
 						200, 20);
 			else
@@ -76,9 +74,9 @@ public class GuiLogin extends GuiScreen {
 		if (par1GuiButton.id == 0) {
 			if (remember.isChecked()) {
 				if (label.equals("Register"))
-					Auth.saveFile(saveFile, textField.getText());
+					ForgeAuth.saveFile(saveFile, textField.getText());
 				else
-					Auth.saveFile(saveFile, passField.getText());
+					ForgeAuth.saveFile(saveFile, passField.getText());
 			} else
 				if(saveFile.delete())
                     FMLLog.warning("Cannot to remove Last Pass");
@@ -88,16 +86,16 @@ public class GuiLogin extends GuiScreen {
 			try {
 				outputStream.writeUTF(label);
 				if (label.equals("Register"))
-					outputStream.writeUTF(Auth.hash(textField.getText()));
+					outputStream.writeUTF(ForgeAuth.hash(textField.getText()));
 				else
-					outputStream.writeUTF(Auth.hash(passField.getText()));
+					outputStream.writeUTF(ForgeAuth.hash(passField.getText()));
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.data = bos.toByteArray();
 			packet.length = bos.size();
-			Auth.network.sendToServer(packet);
+			ForgeAuth.network.sendToServer(packet);
 			mc.displayGuiScreen(null);
 			mc.setIngameFocus();
 		} else if (par1GuiButton.id == 1) {
