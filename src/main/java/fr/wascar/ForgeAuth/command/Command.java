@@ -1,10 +1,10 @@
-package fr.Knux14.ForgeAuth.command;
+package fr.wascar.ForgeAuth.command;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import cpw.mods.fml.common.FMLLog;
-import fr.Knux14.ForgeAuth.Vars;
+import fr.wascar.ForgeAuth.ForgeAuth;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -33,7 +33,7 @@ public class Command extends CommandBase {
                     "$4[ForgeAuth] Use: /authreset <user>"));
 		} else {
             MinecraftServer server = MinecraftServer.getServer();
-            File f = new File(Vars.userfolder, server.func_152358_ax().func_152655_a(astring[0]).getId().toString());
+            File f = new File(ForgeAuth.userfolder, server.func_152358_ax().func_152655_a(astring[0]).getId().toString());
 			if (f.exists())
             {
                 if(!f.delete())

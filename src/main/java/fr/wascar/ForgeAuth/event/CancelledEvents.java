@@ -1,8 +1,7 @@
-package fr.Knux14.ForgeAuth.event;
+package fr.wascar.ForgeAuth.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import fr.Knux14.ForgeAuth.Auth;
-import fr.Knux14.ForgeAuth.Vars;
+import fr.wascar.ForgeAuth.ForgeAuth;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.ServerChatEvent;
@@ -53,21 +52,21 @@ public class CancelledEvents {
 
 	@SubscribeEvent
 	public void playerChat(ServerChatEvent e) {
-		if (!(Auth.players.get(e.player)))
+		if (!(ForgeAuth.players.get(e.player)))
 			e.setCanceled(true);
 	}
 
 	@SubscribeEvent
 	public void playerCmd(CommandEvent e) {
-		if (Vars.modEnabled) {
-			if (((e.sender instanceof EntityPlayer)) && (!(Auth.players.get(e.sender))))
+		if (ForgeAuth.modEnabled) {
+			if (((e.sender instanceof EntityPlayer)) && (!(ForgeAuth.players.get(e.sender))))
 				e.setCanceled(true);
 		}
 	}
 
 	private void cancel(EntityEvent e) {
-		if (Vars.modEnabled) {
-			if (((e.entity instanceof EntityPlayer)) && (!(Auth.players.get((e.entity)))))
+		if (ForgeAuth.modEnabled) {
+			if (((e.entity instanceof EntityPlayer)) && (!(ForgeAuth.players.get((e.entity)))))
 				e.setCanceled(true);
 		}
 	}

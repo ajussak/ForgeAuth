@@ -1,6 +1,6 @@
-package fr.Knux14.ForgeAuth.client.gui;
+package fr.wascar.ForgeAuth.client.gui;
 
-import fr.Knux14.ForgeAuth.Vars;
+import fr.wascar.ForgeAuth.ForgeAuth;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 public class GuiCheckBox extends GuiButton
 {
   private boolean isChecked;
-  protected static final ResourceLocation a = new ResourceLocation(Vars.modid.toLowerCase(), "textures/gui/check.png");
+  protected static final ResourceLocation a = new ResourceLocation(ForgeAuth.MODID.toLowerCase(), "textures/gui/check.png");
 
   public GuiCheckBox(int id, int xPosition, int yPosition, boolean initialState)
   {

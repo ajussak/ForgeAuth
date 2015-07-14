@@ -1,4 +1,4 @@
-package fr.Knux14.ForgeAuth.client.gui;
+package fr.wascar.ForgeAuth.client.gui;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
