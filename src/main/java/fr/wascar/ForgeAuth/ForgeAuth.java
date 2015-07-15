@@ -1,5 +1,6 @@
 package fr.wascar.ForgeAuth;
 
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -15,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.logging.log4j.Level;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -25,7 +27,7 @@ import java.util.HashMap;
 public class ForgeAuth {
 
     public static final String MODID = "ForgeAuth";
-    public static final String VERSION = "0.6.1";
+    public static final String VERSION = "0.6.2";
     public static final String NAME = "ForgeAuth";
     public static File userfolder;
     public static boolean debug;
@@ -63,7 +65,7 @@ public class ForgeAuth {
     }
 
     public static boolean hasPass(EntityPlayer pl) {
-        String username = pl.getUniqueID().toString();
+        String username = pl.getDisplayName();
         File playerFile = new File(userfolder, username);
         if (playerFile.exists()) {
             if (readPlayer(username).isEmpty()) {
@@ -78,10 +80,10 @@ public class ForgeAuth {
     }
 
     public static boolean checkPass(EntityPlayer pl, String passwd) {
-        String username = pl.getUniqueID().toString();
+        String username = pl.getDisplayName();
         File playerFile = new File(userfolder, username);
         if (playerFile.exists()) {
-            String savedPass = readPlayer(pl.getUniqueID().toString());
+            String savedPass = readPlayer(pl.getDisplayName());
             if (savedPass.equals(passwd)) {
                 print("Password correct: ");
                 print(passwd);
@@ -99,7 +101,7 @@ public class ForgeAuth {
 
     public static boolean savePlayer(EntityPlayer pl, String pass) {
         ForgeAuth.print("Saving player password");
-        return saveFile(new File(userfolder, pl.getUniqueID().toString()), pass);
+        return saveFile(new File(userfolder, pl.getDisplayName()), pass);
     }
 
     public static boolean saveFile(File f, String str) {
@@ -136,7 +138,7 @@ public class ForgeAuth {
 
     public static void print(String s) {
         if (debug) {
-            System.out.println(s);
+            FMLLog.log(Level.DEBUG, s);
         }
     }
 
