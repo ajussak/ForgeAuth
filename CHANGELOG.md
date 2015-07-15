@@ -1,6 +1,11 @@
 ForgeAuth
 =========
 
+### 0.6.1
+- 1.8 Support
+- Bugs fixes
+- Config system
+
 ### 0.6
 - 1.7.10 Support
 - Bug Fix : No window focus after login GUI
