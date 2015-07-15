@@ -39,6 +39,11 @@ public class onPlayerJoin {
             Packet250CustomPayload packet = new Packet250CustomPayload();
             packet.data = bos.toByteArray();
             packet.length = bos.size();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             ForgeAuth.network.sendTo(packet, (EntityPlayerMP) event.player);
         }
 	}

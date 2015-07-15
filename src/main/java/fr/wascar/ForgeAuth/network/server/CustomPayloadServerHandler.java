@@ -12,7 +12,6 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-
 public class CustomPayloadServerHandler implements IMessageHandler<Packet250CustomPayload, IMessage>
 {
     @Override
