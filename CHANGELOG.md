@@ -1,6 +1,10 @@
 ForgeAuth
 =========
 
+### 0.6.2
+- Confirmation field in register GUI
+- Cracked Minecraft supported
+
 ### 0.6.1
 - 1.8 Support
 - Bugs fixes
