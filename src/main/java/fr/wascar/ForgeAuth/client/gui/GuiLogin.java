@@ -23,10 +23,13 @@ public class GuiLogin extends GuiScreen {
 	private GuiPasswordField passConfirmField;
 	private GuiCheckBox remember;
 	private File saveFile;
+	private final int posYConfirm = 85;
+	private final int posYRemember;
 
 	public GuiLogin(String registerOrLogin) {
 		label = registerOrLogin;
 		saveFile = new File(ForgeAuth.userfolder.getParent(), "ForgeAuthLastPass");
+		posYRemember = (label.equals("Register")) ? 25 : 0;
 	}
 
 	public void updateScreen() {
@@ -38,12 +41,11 @@ public class GuiLogin extends GuiScreen {
 	public void initGui() {
 		Keyboard.enableRepeatEvents(true);
 		buttonList.clear();
-		buttonList.add(new GuiButton(0, width / 2 - 100, height / 4 + 96 + 12,
-				label));
+		buttonList.add(new GuiButton(0, width / 2 - 100, height / 4 + 96 + 12, label));
 		((GuiButton) buttonList.get(0)).enabled = false;
 		buttonList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + 12,
 				I18n.format("gui.cancel")));
-		buttonList.add(this.remember = new GuiCheckBox(2, width / 2 + 84, 110));
+		buttonList.add(this.remember = new GuiCheckBox(2, width / 2 + 84, posYConfirm + posYRemember));
 		String savedPass = "";
 		if (saveFile.exists())
 			savedPass = ForgeAuth.readFile(saveFile);
@@ -54,7 +56,7 @@ public class GuiLogin extends GuiScreen {
 		passField.setFocused(true);
 
 		if (label.equals("Register"))
-			passConfirmField = new GuiPasswordField(fontRendererObj, width / 2 - 100, 85, 200, 20);
+			passConfirmField = new GuiPasswordField(fontRendererObj, width / 2 - 100, posYConfirm, 200, 20);
 		else
 		{
 			if(savedPass != null)
@@ -131,7 +133,7 @@ public class GuiLogin extends GuiScreen {
 		drawString(fontRendererObj,
 				"This server is asking you to " + label.toLowerCase(),
 				width / 2 - 100, 47, 10526880);
-		drawString(fontRendererObj, "Remember ?", width / 2 - 100, 110, 10526880);
+		drawString(fontRendererObj, "Remember ?", width / 2 - 100, posYConfirm + posYRemember + 7, 10526880);
 		passField.drawTextBox();
 		if (label.equals("Register"))
 			passConfirmField.drawTextBox();
