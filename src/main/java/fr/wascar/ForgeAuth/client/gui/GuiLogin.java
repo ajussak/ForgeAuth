@@ -17,53 +17,57 @@ import org.lwjgl.input.Keyboard;
 
 @SideOnly(Side.CLIENT)
 public class GuiLogin extends GuiScreen {
-	private GuiTextField textField;
-	private GuiTextField passField;
-	private GuiCheckBox remember;
 	private final String label;
+	private GuiTextField passField;
+	private GuiPasswordField passConfirmField;
+	private GuiCheckBox remember;
 	private File saveFile;
+	private final int posYConfirm = 85;
+	private final int posYRemember;
 
 	public GuiLogin(String registerOrLogin) {
 		label = registerOrLogin;
 		saveFile = new File(ForgeAuth.userfolder.getParent(), "ForgeAuthLastPass");
+		posYRemember = (label.equals("Register")) ? 25 : 0;
 	}
 
 	public void updateScreen() {
+		passField.updateCursorCounter();
 		if (label.equals("Register"))
-			textField.updateCursorCounter();
-		else
-			passField.updateCursorCounter();
+			passConfirmField.updateCursorCounter();
 	}
 
 	public void initGui() {
 		Keyboard.enableRepeatEvents(true);
 		buttonList.clear();
-		buttonList.add(new GuiButton(0, width / 2 - 100, height / 4 + 96 + 12,
-				label));
+		buttonList.add(new GuiButton(0, width / 2 - 100, height / 4 + 96 + 12, label));
+		((GuiButton) buttonList.get(0)).enabled = false;
 		buttonList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + 12,
 				I18n.format("gui.cancel")));
-		buttonList.add(this.remember = new GuiCheckBox(2, width / 2 + 84, 85));
+		buttonList.add(this.remember = new GuiCheckBox(2, width / 2 + 84, posYConfirm + posYRemember));
 		String savedPass = "";
-		if (saveFile.exists()) {
+		if (saveFile.exists())
 			savedPass = ForgeAuth.readFile(saveFile);
-		}
-		if (label.equals("Register")) {
-			textField = new GuiTextField(3, fontRendererObj, width / 2 - 100, 60,
-					200, 20);
-			textField.setFocused(true);
-			textField.setText(savedPass != null ? savedPass : "");
-			remember.setChecked((savedPass != null) && (!savedPass.isEmpty()));
-		} else {
-			if (ForgeAuth.debug)
-				passField = new GuiTextField(3, fontRendererObj, width / 2 - 100, 60,
-						200, 20);
+		if (ForgeAuth.debug)
+			passField = new GuiTextField(3, fontRendererObj, width / 2 - 100, 60, 200, 20);
+		else
+			passField = new GuiPasswordField(3, fontRendererObj, width / 2 - 100, 60, 200, 20);
+		passField.setFocused(true);
+
+		if (label.equals("Register"))
+			passConfirmField = new GuiPasswordField(4, fontRendererObj, width / 2 - 100, posYConfirm, 200, 20);
+		else
+		{
+			if(savedPass != null)
+			{
+				passField.setText(savedPass);
+				((GuiButton) buttonList.get(0)).enabled = true;
+			}
 			else
-				passField = new GuiPasswordField(3, fontRendererObj, width / 2 - 100,
-						60, 200, 20);
-			passField.setFocused(true);
-			passField.setText(savedPass != null ? savedPass : "");
-			remember.setChecked((savedPass != null) && (!savedPass.isEmpty()));
+				passField.setText("");
 		}
+
+		remember.setChecked((savedPass != null) && (!savedPass.isEmpty()));
 	}
 
 	public void onGuiClosed() {
@@ -72,12 +76,9 @@ public class GuiLogin extends GuiScreen {
 
 	protected void actionPerformed(GuiButton par1GuiButton) {
 		if (par1GuiButton.id == 0) {
-			if (remember.isChecked()) {
-				if (label.equals("Register"))
-					ForgeAuth.saveFile(saveFile, textField.getText());
-				else
+			if (remember.isChecked())
 					ForgeAuth.saveFile(saveFile, passField.getText());
-			} else
+			else if(saveFile.exists())
 				if(saveFile.delete())
                     FMLLog.warning("Cannot to remove Last Pass");
 
@@ -85,10 +86,7 @@ public class GuiLogin extends GuiScreen {
 			DataOutputStream outputStream = new DataOutputStream(bos);
 			try {
 				outputStream.writeUTF(label);
-				if (label.equals("Register"))
-					outputStream.writeUTF(ForgeAuth.hash(textField.getText()));
-				else
-					outputStream.writeUTF(ForgeAuth.hash(passField.getText()));
+				outputStream.writeUTF(ForgeAuth.hash(passField.getText()));
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -107,15 +105,15 @@ public class GuiLogin extends GuiScreen {
 	}
 
 	protected void keyTyped(char par1, int par2) {
+		passField.textboxKeyTyped(par1, par2);
 		if (label.equals("Register")) {
-			textField.textboxKeyTyped(par1, par2);
-			((GuiButton) buttonList.get(0)).enabled = (textField.getText()
-					.trim().length() > 0);
-		} else {
-			passField.textboxKeyTyped(par1, par2);
-			((GuiButton) buttonList.get(0)).enabled = (passField.getText()
-					.trim().length() > 0);
+			passConfirmField.textboxKeyTyped(par1, par2);
+			((GuiButton) buttonList.get(0)).enabled = (passField.getText().trim().length() > 0 &&
+					passConfirmField.getText().equals(passField.getText()));
 		}
+		else
+			((GuiButton) buttonList.get(0)).enabled = (passField.getText().trim().length() > 0);
+
 		if ((par2 == 28) || (par2 == 156)) {
 			actionPerformed((GuiButton) buttonList.get(1));
 		}
@@ -127,10 +125,9 @@ public class GuiLogin extends GuiScreen {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		passField.mouseClicked(par1, par2, par3);
 		if (label.equals("Register"))
-			textField.mouseClicked(par1, par2, par3);
-		else
-			passField.mouseClicked(par1, par2, par3);
+			passConfirmField.mouseClicked(par1, par2, par3);
 	}
 
 	public void drawScreen(int par1, int par2, float par3) {
@@ -139,16 +136,10 @@ public class GuiLogin extends GuiScreen {
 		drawString(fontRendererObj,
 				"This server is asking you to " + label.toLowerCase(),
 				width / 2 - 100, 47, 10526880);
-		drawString(fontRendererObj, "Remember ?", width / 2 - 100, 90, 10526880);
-		if (label.equals("Register")) {
-			textField.drawTextBox();
-			((GuiButton) buttonList.get(0)).enabled = (textField.getText()
-					.trim().length() > 0);
-		} else {
-			passField.drawTextBox();
-			((GuiButton) buttonList.get(0)).enabled = (passField.getText()
-					.trim().length() > 0);
-		}
+		drawString(fontRendererObj, "Remember ?", width / 2 - 100, posYConfirm + posYRemember + 7, 10526880);
+		passField.drawTextBox();
+		if (label.equals("Register"))
+			passConfirmField.drawTextBox();
 		super.drawScreen(par1, par2, par3);
 	}
 }

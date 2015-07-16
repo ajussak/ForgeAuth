@@ -5,6 +5,7 @@ import fr.wascar.ForgeAuth.proxy.CommonProxy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.logging.log4j.Level;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,7 +25,7 @@ import java.util.HashMap;
 public class ForgeAuth {
 
     public static final String MODID = "ForgeAuth";
-    public static final String VERSION = "0.6.1";
+    public static final String VERSION = "0.6.2";
     public static final String NAME = "ForgeAuth";
     public static File userfolder;
     public static boolean debug;
@@ -61,7 +63,7 @@ public class ForgeAuth {
     }
 
     public static boolean hasPass(EntityPlayer pl) {
-        String username = pl.getUniqueID().toString();
+        String username = pl.getDisplayNameString();
         File playerFile = new File(userfolder, username);
         if (playerFile.exists()) {
             if (readPlayer(username).isEmpty()) {
@@ -76,10 +78,10 @@ public class ForgeAuth {
     }
 
     public static boolean checkPass(EntityPlayer pl, String passwd) {
-        String username = pl.getUniqueID().toString();
+        String username = pl.getDisplayNameString();
         File playerFile = new File(userfolder, username);
         if (playerFile.exists()) {
-            String savedPass = readPlayer(pl.getUniqueID().toString());
+            String savedPass = readPlayer(pl.getDisplayNameString());
             if (savedPass.equals(passwd)) {
                 print("Password correct: ");
                 print(passwd);
@@ -97,7 +99,7 @@ public class ForgeAuth {
 
     public static boolean savePlayer(EntityPlayer pl, String pass) {
         ForgeAuth.print("Saving player password");
-        return saveFile(new File(userfolder, pl.getUniqueID().toString()), pass);
+        return saveFile(new File(userfolder, pl.getDisplayNameString()), pass);
     }
 
     public static boolean saveFile(File f, String str) {
@@ -134,7 +136,7 @@ public class ForgeAuth {
 
     public static void print(String s) {
         if (debug) {
-            System.out.println(s);
+            FMLLog.log(Level.DEBUG, s);
         }
     }
 
