@@ -35,7 +35,7 @@ public class CustomPayloadServerHandler implements IMessageHandler<Packet250Cust
                 ForgeAuth.savePlayer(ply, pass);
                 ForgeAuth.players.remove(ply);
                 ForgeAuth.players.put(ply, true);
-                ply.addChatMessage(new ChatComponentText("You are registred !"));
+                ply.addChatMessage(new ChatComponentText("You are registered !"));
             }
         } catch (IOException e) {
             e.printStackTrace();
