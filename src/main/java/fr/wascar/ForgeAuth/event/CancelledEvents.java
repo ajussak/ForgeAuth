@@ -52,21 +52,21 @@ public class CancelledEvents {
 
 	@SubscribeEvent
 	public void playerChat(ServerChatEvent e) {
-		if (!(ForgeAuth.players.get(e.player)))
+		if (!(e.player instanceof FakePlayer) && !(ForgeAuth.players.get(e.player)))
 			e.setCanceled(true);
 	}
 
 	@SubscribeEvent
 	public void playerCmd(CommandEvent e) {
 		if (ForgeAuth.modEnabled) {
-			if (((e.sender instanceof EntityPlayer)) && (!(ForgeAuth.players.get(e.sender))))
+			if ((e.sender instanceof EntityPlayer) && !(e.sender instanceof FakePlayer) && (!(ForgeAuth.players.get(e.sender))))
 				e.setCanceled(true);
 		}
 	}
 
 	private void cancel(EntityEvent e) {
 		if (ForgeAuth.modEnabled) {
-			if (((e.entity instanceof EntityPlayer)) && (!(ForgeAuth.players.get((e.entity)))))
+			if ((e.entity instanceof EntityPlayer) && !(e.entity instanceof FakePlayer) && (!(ForgeAuth.players.get((e.entity)))))
 				e.setCanceled(true);
 		}
 	}
